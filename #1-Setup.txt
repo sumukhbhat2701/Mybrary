@@ -100,4 +100,15 @@ if(process.env.NODE_ENV!=='production'){
 #Set github:
 git init
 
-create a .gitignore and add files not to add to github
+#create a .gitignore and add files not to add to github(.env(private user info) and node_modules(large file with all dependencies))
+
+git add .
+
+git commit -m "Initial Setup"
+
+#Create a new repo in the github website
+
+git remote add origin URL(copy from the repo)
+
+git push -u origin master
+
