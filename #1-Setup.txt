@@ -1,3 +1,5 @@
+#Youtube playlist:https://www.youtube.com/playlist?list=PLZlA0Gpn_vH8jbFkBjOuFjhxANC63OmXM
+
 #Download nodejs(https://www.youtube.com/watch?v=VR6lMnD-X70  or other)
 
 #CMD(in the project folder):
@@ -100,7 +102,7 @@ if(process.env.NODE_ENV!=='production'){
 #Set github:
 git init
 
-#create a .gitignore and add files not to add to github(.env(private user info) and node_modules(large file with all dependencies))
+#create a .gitignore and add files not to add to github(Eg:here .env(private user info) and node_modules(large file with all dependencies))
 
 git add .
 
@@ -111,4 +113,42 @@ git commit -m "Initial Setup"
 git remote add origin URL(copy from the repo)
 
 git push -u origin master
+(If any error:git push origin master --force)
+
+
+#Deploy to a server:heroku,signup and login in the website
+(For the first time download Heroku cli:https://devcenter.heroku.com/articles/heroku-cli)
+
+Add all the files to repo using cmd command itslef
+
+Create new app at https://dashboard.heroku.com/apps
+
+heroku login
+(enter the website pass,if asked:Hiindia2701!)
+
+heroku git:remote -a app_name_saved_in_heroku_website
+(Eg:
+heroku git:remote -a learning-full-stack-web-dev)
+
+git push heroku master
+
+#Go to settings of heroku app setup page:Reveal config files,add all the variables in .env file there.Eg:
+DATABASE_URL <VALUE>
+
+#TO get the value:Go to mogodb atlas(Create a account/Login),then Create a Cluster(free):https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters/pathSelector
+Leave everything to default and hit create cluster
+
+After a cluster is created,
+Hit connect
+
+Type a username(Eg:user),autogenerate/type a password(copy the pass,its required later)
+
+Hit choose a connection method
+
+Hit Connect to application
+
+Copy the connection string to the <VALUE> and replace <user> and <password> to the one used
+
+#Press open app in the heroku app setup webpage to run on that server
+
 

@@ -1,0 +1,209 @@
+NOTE:Format of the project:
+For every action,create a .js file in routes and a folder with .ejs files for that action/route in views folder
+
+#create a authors.js in routes folder:
+->copy all the code from index.js to it and replace the main code with new routes:
+//All authors route
+router.get('/',(req,res)=>{                       //localhost:3000 becomes localhost:3000/
+	res.render('authors/index')
+})
+
+//New Author route
+router.get('/new',(req,res)=>{
+	res.render('authors/new')
+})
+
+//Create new author route
+router.post('/',(req,res)=>{
+	res.send('Create')            //send() is just outputting text message on the browser
+})
+
+#Create a new folder called authors in main folder and create a index.ejs and new.ejs:
+Add a text 'All authors' in index.ejs
+Add a text 'new author' in new.ejs
+
+#In server.js:Add the router...
+after ,app.use('/',indexRouter) add:
+app.use('/authors',authorRouter)
+
+after,const indexRouter=require('./routes/index') add:
+const authorRouter=require('./routes/authors')
+
+//localhost:3000/authors and localhost:3000/authors/new ->changes can be seen
+
+#NOTE:
+The first parameter of app.use(string1,router) of server.js 
+is appended with the
+first parameter of router.get(string2,(req,res)=>{res.render('index')}) of the file in the location const routername=require(location)
+i.e string1+string2 is used after localhost:3000
+
+Eg:
+1)
+router.get('/',(req,res)=>{res.render('authors/index')})
+const authorRouter=require('./routes/authors')  ->authors.js
+app.use('/authors',authorRouter)
+
+Therefore,link=localhost:3000+/authors+/=localhost:3000/authors/
+
+1)
+router.get('/new',(req,res)=>{res.render('authors/index')})
+const authorRouter=require('./routes/authors')  ->authors.js
+app.use('/authors',authorRouter)
+
+Therefore,link=localhost:3000+/authors+/new=localhost:3000/authors/new
+
+#Create a partials folder in views(To not manually type in the link every time):
+#Create a header.ejs in that folder:Add the links:
+<header>
+    <nav>
+        <a href="/">Mybrary</a>
+        <ul>
+            <li><a href="/authors">Authors</a></li>               #/authors means present_link/authors
+            <li><a href='/authors/new'>Add Author</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+#To update the webpage,In the layouts.ejs in layouts folder of views folder:Delete the Before and After text
+<%- include('../partials/header.ejs')%> //Go 1 folders out from current folder to partials folder(1 dot-current folder,2nd dot-go back once)
+
+#create a author model in models folder by creating author.js(singular-author,not authors):
+const mongoose=require('mongoose')
+
+const authorSchema = new mongoose.Schema({             //Schema like a is database table
+	name:{
+		type:String,
+		required:true
+	}
+})
+module.exports=mongoose.model('Author',authorSchema) 
+
+#To import the author model in authors.js:
+const Author=require('../models/author') //in the beginning
+
+change the //New Author Route to:
+router.get('/new',(req,res)=>{
+	res.render('authors/new',{author:new Author()})
+})
+
+#In the new.ejs of authors folder in views folder,add a form to input new author info:
+//Use this reference for the form
+router.post('/',(req,res)=>{    //method is post,action is nothing(or / which is the first parameter)after /authors(mentioned in server.js) i.e actions is /authors/ or just /authors
+	res.send('Create')
+})
+
+
+<h2>New Author</h2>
+<form action='/authors' method="POST">
+
+	<a href='/authors'>Cancel</a>           //Go back to homepage
+	<button type='submit'>Create</button>   //Submit
+</form>
+
+#To get the input,we create a separate file in the folder authors called _form_fields.ejs(_ indicates that it is a partial file that is shared between 2 files) 
+So that same code can be used by both create and edit author later
+
+<label>Name</label>
+<input type="text" name="name" value="<%=author.name%>">   //author object created in res.render() of server.js,name='name' is used to save it to the db
+//value=' ' that because,if it is edit author,the initial author should be displayed from author obj of db
+
+#Inport the above file into new.ejs:
+<%-include('_form_fields')%>
+
+#It is not easy to access the saved variables:So we install body parser:
+npm i body parser
+
+#in server.js:
+const bodyParser=require('body-parser')
+
+
+app.use(bodyParser.urlencoded({limit:'10mb',extended:false}))
+NOTE:Add this line compulsorily before before app.use() of routers i.e before authorRouter and indexRouter i.e in the order:
+app.use(bodyParser.urlencoded({limit:'10mb',extended:false}))
+
+app.use('/',indexRouter)
+app.use('/authors',authorRouter)
+
+#In new.ejs,instead of 'Created...' text in router.post()://To output the entered authorname on the screen
+req.body.name //to send the input.If name='name2' in <input> tag of _form_fields,add req.body.name2
+
+SAVE IN DATABASE:
+#In new.ejs ,to save in the db:
+//Create new Author route
+router.post('/',async (req,res)=>{   //We set async and await for any errors or not
+	const author=new Author({
+		name:req.body.name
+        })
+	try{
+		const newAuthor=await author.save()      //Await for error:Save the author object to db through newAuthor router,if any error execute catch block 
+		//res.redirect('authors/${newAuthor.id}')
+		res.redirect('authors')
+	} catch {
+		res.render('authors/new',{
+			author:author,				//Don't save in db,but save in the object for next time entry display
+			errorMessage:'Error creating Author!'     //Through an error
+		})
+	}
+})
+
+	
+
+#if no entry is done,there should be a error,so to display errorMessage of 'Error creting Author':
+#Create a new file errorMessage.ejs in partials folder:
+<%if(locals.errorMessage!=null){%>  //If error meassage is defined only 
+	<%= errorMessage %>   //%= is for sending to other html page,% is just in that page
+<%}%>
+
+#In layouts.ejs add:<%- include('../partials/errorMessage.ejs') %>
+
+
+#To display saved authors->authors.js:Edit //All authors route
+router.get('/',async (req,res)=>{
+	try{
+		const authors=await Author.find({}) //No condition,find all authors
+		res.render('authors/index',{authors:authors})
+	} catch {
+		res.redirect('/')    //Redirect to homepage,if any error
+	}
+})
+
+#After going to index.ejs of authors,instaed of displaying 'All authors' text,create a search author bar:
+<h2>Search Authors</h2>
+<form action="/authors" method='GET'>
+    <label>Name</label>
+    <input type='text' name='name'>
+    <button type='submit'>Search</button>
+</form>
+
+#Display all authors:(in the index.ejs)      //Incase we dont input anything in the search bar ,then every author name is displayed
+<% authors.forEach(author => { %>    //iterate through each author
+    <div><%= author.name %></div>	//display all authors
+<% }) %>
+
+#Search through all authors:(authors.js)
+In //All authors route:
+router.get('/',async (req,res)=>{
+	let serachOptions={}
+	if(req.query.name!=null && req.query.name!='')  {     //req.body for POST,req.query for GET,query is in the link:http://localhost:3000/authors?name=<req.query>
+		searchOptions.name=new RegExp(req.query.name,'i')   //regular expressions to make it search for partial names,i.e jo or oh or hn should give john and pass in 'i' i.e make it case insensitive
+}
+try{
+	const authors=await Author.find(searchOptions)
+	res.render('authors/index',{
+		authors:authors,
+		searchOptions:req.query
+	})
+} catch {
+	res.redirect('/')
+	}
+})
+
+#in <input> tag of index.ejs of authors add:
+value="<%= searchOptions.name%>"
+
+#git add .
+#git commit -m "Initial Author Route"
+#git push
+
+#git push heroku master
