@@ -3,16 +3,16 @@ const router=express.Router()
 const Author=require('../models/author')
 
 //All authors route->index.ejs in authors folder
-router.get('/',async (req,res)=>{
-	let serachOptions={}
+router.get('/',async (req,res) => {
+	let searchOptions={}
 	if(req.query.name!=null && req.query.name!=='')  {     
 		searchOptions.name=new RegExp(req.query.name,'i')
 	}
-	try{
+	try {
 		const authors=await Author.find(searchOptions)
 		res.render('authors/index',{
 			authors:authors,
-			searchOptions:req.query
+			searchOptions: req.query
 		})
 	} catch {
 		res.redirect('/')

@@ -152,7 +152,7 @@ router.post('/',async (req,res)=>{   //We set async and await for any errors or 
 #if no entry is done,there should be a error,so to display errorMessage of 'Error creting Author':
 #Create a new file errorMessage.ejs in partials folder:
 <%if(locals.errorMessage!=null){%>  //If error meassage is defined only 
-	<%= errorMessage %>   //%= is for sending to other html page,% is just in that page
+	<%= errorMessage %>   //%= is for sending to other html page,% is just in that page(code is not sent to html client page,but only runs in the server)
 <%}%>
 
 #In layouts.ejs add:<%- include('../partials/errorMessage.ejs') %>
@@ -184,7 +184,7 @@ router.get('/',async (req,res)=>{
 #Search through all authors:(authors.js)
 In //All authors route:
 router.get('/',async (req,res)=>{
-	let serachOptions={}
+	let searchOptions={}
 	if(req.query.name!=null && req.query.name!='')  {     //req.body for POST,req.query for GET,query is in the link:http://localhost:3000/authors?name=<req.query>
 		searchOptions.name=new RegExp(req.query.name,'i')   //regular expressions to make it search for partial names,i.e jo or oh or hn should give john and pass in 'i' i.e make it case insensitive
 }
@@ -207,3 +207,15 @@ value="<%= searchOptions.name%>"
 #git push
 
 #git push heroku master
+
+#Run app from heroku website,
+Application error comes up,
+
+#To avoid that,go to https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters->CONNECT
+ADD 0.0.0.0/0 in the IP Address
+means allow all IP addresses
+
+NOTE:<% %> is to run on the page(server) itself
+<%= %> is to send it to client html from server page
+<%- %> is to recieve in the client page from server page 
+
