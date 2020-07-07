@@ -92,7 +92,7 @@ db.once('open',()=>console.log('Connected to mongoose')) //Display the text 'Con
 #To create DATABASE_URL use:npm i --save-dev dotenv //--save-dev bcz its needed to be installed only for our local current project
 
 #Create a file named .env in the main folder:
-DATABASE_URL=mongodb://localhost/test
+DATABASE_URL=mongodb://localhost/mybrary
 
 #In the very top of server.js://Check for the evironment:production or development
 if(process.env.NODE_ENV!=='production'){
@@ -133,7 +133,7 @@ heroku git:remote -a learning-full-stack-web-dev)
 git push heroku master
 
 #Go to settings of heroku app setup page:Reveal config files,add all the variables in .env file there.Eg:
-DATABASE_URL <VALUE>
+DATABASE_URL     <VALUE>
 
 #TO get the value:Go to mogodb atlas(Create a account/Login),then Create a Cluster(free):https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters/pathSelector
 Leave everything to default and hit create cluster
@@ -141,13 +141,18 @@ Leave everything to default and hit create cluster
 After a cluster is created,
 Hit connect
 
-Type a username(Eg:user),autogenerate/type a password(copy the pass,its required later)
+Type a username(Eg:user),type a password(copy the password,its required later)
+(Here we used sumukhbhat2701:indiaisthebest2701)
 
 Hit choose a connection method
 
-Hit Connect to application
+Hit Connect to application(2nd option)
 
-Copy the connection string to the <VALUE> and replace <user> and <password> to the one used
+Copy the connection string url to the <VALUE> and replace <user> and <password> to the one used in mongoDB atlas
+and change <dbname> to desired DB name(Doesnt matter what the code says)
+Here we used mongodb+srv://sumukhbhat2701:indiaisthebest2701@cluster0.ztp7u.mongodb.net/Mybrary_DB?retryWrites=true&w=majority
+
+#Click on More on RHS of heroku app page,click on RESTART DYNOS
 
 #Press open app in the heroku app setup webpage to run on that server
 

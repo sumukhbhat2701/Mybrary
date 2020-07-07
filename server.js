@@ -8,6 +8,7 @@ const bodyParser=require('body-parser')
 
 const indexRouter=require('./routes/index')
 const authorRouter=require('./routes/authors')
+const bookRouter=require('./routes/books')
 
 
 const mongoose=require('mongoose')
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({limit:'10mb',extended:false}))
 
 app.use('/',indexRouter)
 app.use('/authors',authorRouter)
+app.use('/books',bookRouter)
 
 
 

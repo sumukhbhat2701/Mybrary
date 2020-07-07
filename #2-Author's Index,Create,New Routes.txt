@@ -201,6 +201,9 @@ try{
 
 #in <input> tag of index.ejs of authors add:
 value="<%= searchOptions.name%>"
+i.e. <input type="text" name="name"  value="<%= searchOptions.name%>">
+
+#ADD TO GITHUB AND HEROKU:
 
 #git add .
 #git commit -m "Initial Author Route"
@@ -214,6 +217,18 @@ Application error comes up,
 #To avoid that,go to https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters->CONNECT
 ADD 0.0.0.0/0 in the IP Address
 means allow all IP addresses
+
+#DB is saved in COLLECTIONS of https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters
+
+NOTE:1)Make sure that the cluster username and password((2) point in SETUP CONNECTIVITY after Clicking CONNECT of https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters)
+are added to Heroku's settings tab's config var's variable(DATABASE_URL in this case) VALUE
+i.e mongodb+srv://<username>:<password>@cluster0.ztp7u.mongodb.net/<dbname>?retryWrites=true&w=majority
+where <username>,<password> should be same as cluster username and password in the place mentioned above
+<dbname> can be anything,and has nothing to do with the code.
+In this project we used,sumukhbhat2701:indiaisthebest2701 and Mybrary_DB
+2)(1) point in SETUP CONNECTIVITY after Clicking CONNECT of https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters
+i.e the IP address should be set to 0.0.0.0/0
+3)After making any changes in heroku,Refresh dynamos before open app by clicking on REFRESH DYNOS on MORE in the RHS of the screen
 
 NOTE:<% %> is to run on the page(server) itself
 <%= %> is to send it to client html from server page
