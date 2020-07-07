@@ -351,6 +351,7 @@ Add public/uploads in .gitignore
 
 #git push heroku master
 
+#PROBLEM:The image file wont be saved in heroku server
 
 ----------------------------------------------------------------------------------------------------------------------------
 NOTE:To print the error in try block:use
