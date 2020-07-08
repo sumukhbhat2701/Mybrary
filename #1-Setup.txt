@@ -42,7 +42,7 @@ app.listen(process.env.PORT || 3000) // Run At http://localhost:3000/
 const express=required('express')
 const router=express.Router()
 
-router.get('/',(req,res))=>{
+router.get('/',(req,res)=>{
 	res.send('Hello world')          //Prints hello world in the browser
 })  //first parameter:localhost.2nd parameter is a function with 2 parameters:requests and response
 

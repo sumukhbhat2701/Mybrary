@@ -137,7 +137,7 @@ router.post('/',async (req,res)=>{   //We set async and await for any errors or 
         })
 	try{
 		const newAuthor=await author.save()      //Await for error:Save the author object to db through newAuthor router,if any error execute catch block 
-		//res.redirect('authors/${newAuthor.id}')
+		//res.redirect(`authors/${newAuthor.id}`)
 		res.redirect('authors')
 	} catch {
 		res.render('authors/new',{
@@ -222,12 +222,16 @@ means allow all IP addresses
 
 NOTE:1)Make sure that the cluster username and password((2) point in SETUP CONNECTIVITY after Clicking CONNECT of https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters)
 are added to Heroku's settings tab's config var's variable(DATABASE_URL in this case) VALUE
+
 i.e mongodb+srv://<username>:<password>@cluster0.ztp7u.mongodb.net/<dbname>?retryWrites=true&w=majority
 where <username>,<password> should be same as cluster username and password in the place mentioned above
 <dbname> can be anything,and has nothing to do with the code.
+
 In this project we used,sumukhbhat2701:indiaisthebest2701 and Mybrary_DB
+
 2)(1) point in SETUP CONNECTIVITY after Clicking CONNECT of https://cloud.mongodb.com/v2/5eff73d5359bdb2d1c408352#clusters
 i.e the IP address should be set to 0.0.0.0/0
+
 3)After making any changes in heroku,Refresh dynamos before open app by clicking on REFRESH DYNOS on MORE in the RHS of the screen
 
 NOTE:<% %> is to run on the page(server) itself

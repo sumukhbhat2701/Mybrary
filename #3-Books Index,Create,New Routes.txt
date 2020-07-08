@@ -360,7 +360,7 @@ try{
 }
 catch(err)
 {
-	res.send(err)
+	console.log(err) //appears in the cmd or use res.send(err) to appear on the web screen
 }
 
 NOTE:

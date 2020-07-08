@@ -167,3 +167,9 @@ module.exports.coverImageBasePath = coverImageBasePath
 #In .gitignore remove:
 public/uploads
 as the folders are deleted
+
+#git add .
+#git commit -m "Initial Author Route"
+#git push
+
+#git push heroku master
